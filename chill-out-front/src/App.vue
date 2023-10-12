@@ -1,27 +1,30 @@
 <template>
   <v-app>
-    <div class="main">
+    <v-parallax :src="require('@/assets/back.png')" class="main" >
       <v-app-bar app style="background: none;">
         <div class="d-flex justify-center appbar">
-          <v-btn class="app-bar-buttons " color="white" height="60" >Главная</v-btn>
-          <v-btn class="app-bar-buttons " color="white" height="60" >О гильдии</v-btn>
-          <v-btn color="white" height="60" width="250" class="login app-bar-buttons ">Войти</v-btn>
-          <v-btn class="app-bar-buttons " color="white" height="60" >Лента активности</v-btn>
-          <v-btn class="app-bar-buttons " color="white" height="60" >Галерея</v-btn>
+          <v-btn class="app-bar-buttons" height="60" >Главная</v-btn>
+          <v-btn class="app-bar-buttons" height="60" >О гильдии</v-btn>
+          <v-btn class="login app-bar-buttons" height="60" width="250" >Войти</v-btn>
+          <v-btn class="app-bar-buttons" height="60" >Лента активности</v-btn>
+          <v-btn class="app-bar-buttons" height="60" >Галерея</v-btn>
         </div>
       </v-app-bar>
       <div style="margin-top: 250px; padding-left: 200px;" class="welcome-text">
         Добро пожаловать <br/> на страницу гильдии “Chill Out”!
       </div>
-    </div>
+      <gallery class="pt-16"/>
+    </v-parallax>
   </v-app>
 </template>
 
 <script>
 
+import Gallery from "@/components/Gallery";
 export default {
   name: 'App',
   components: {
+    Gallery
 
   }
 }
@@ -40,17 +43,16 @@ export default {
   background: rgba(217, 217, 217, 0.20);
 }
 .main{
-  width: 1920px;
-  height: 1080px;
-  background: url("assets/back.png");
-  background-size: contain;
+  /*background: url("assets/back.png");*/
 }
 .login{
   background: rgba(217, 217, 217, 0.20);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
 }
 .app-bar-buttons{
+  color: white;
   margin-right: 20px;
+  background: rgba(255, 255, 255, 0.05);
 }
 .welcome-text{
   white-space: pre-wrap;
