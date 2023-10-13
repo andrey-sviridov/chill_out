@@ -1,6 +1,6 @@
 <template>
-<div>
-  <span style="padding-left: 300px;">Галерея</span>
+<div class="text-center">
+  <span style="margin-left: -60%">Галерея</span>
   <v-sheet
       class="mx-auto"
       elevation="3"
@@ -35,6 +35,12 @@
       </v-slide-group-item>
     </v-slide-group>
   </v-sheet>
+  <v-btn
+      class="mt-3 text-white"
+      style="width: 400px; height: 50px; font-size: 20px; background: rgba(255,255,255,0.2)"
+  >
+    Смотреть еще...
+  </v-btn>
 </div>
 </template>
 
