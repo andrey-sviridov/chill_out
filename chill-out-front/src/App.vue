@@ -1,26 +1,34 @@
 <template>
+<div>
+  <video id="background-video" autoplay loop muted>
+    <source :src="require('@/assets/video_animation.mp4')" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+  </video>
+
   <v-app>
-    <v-parallax :src="require('@/assets/back.png')"  >
-      <v-app-bar
-          id="appBar"
-          app
-          style="background: none;"
-          class="app-bar notSticky"
-      >
-        <div class="d-flex justify-center appbar">
-          <v-btn class="app-bar-buttons" >Главная</v-btn>
-          <v-btn class="app-bar-buttons" >О гильдии</v-btn>
-          <v-btn class="login app-bar-buttons">Войти</v-btn>
-          <v-btn class="app-bar-buttons" >Лента активности</v-btn>
-          <v-btn class="app-bar-buttons" >Галерея</v-btn>
-        </div>
-      </v-app-bar>
-      <div style="margin-top: 250px; padding-left: 200px;" class="welcome-text">
-        Добро пожаловать <br/> на страницу гильдии “Chill Out”!
+    <v-app-bar
+        id="appBar"
+        app
+        style="background: none;"
+        class="app-bar notSticky"
+        :class="[{'change-app-bar':  useWinScroll > 64}, {'sticky': useWinScroll > 64}]"
+    >
+      <div class="d-flex justify-center appbar">
+        <v-btn class="app-bar-buttons" >Главная</v-btn>
+        <v-btn class="app-bar-buttons" >О гильдии</v-btn>
+        <v-btn class="login app-bar-buttons">Войти</v-btn>
+        <v-btn class="app-bar-buttons" >Лента активности</v-btn>
+        <v-btn class="app-bar-buttons" >Галерея</v-btn>
       </div>
-      <gallery class="pt-16"/>
-    </v-parallax>
+    </v-app-bar>
+    <div style="margin-top: 250px; padding-left: 200px;" class="welcome-text">
+      Добро пожаловать <br/> на страницу гильдии “Chill Out”!
+    </div>
+    <gallery class="pt-16"/>
+    <gallery class="pt-16"/>
+    <gallery class="pt-16"/>
   </v-app>
+</div>
 </template>
 
 <script>
@@ -39,30 +47,28 @@ export default {
     }
   },
   mounted() {
-  document.addEventListener('scroll', this.useWinScroll)
   },
   methods:{
-    useWinScroll(){
-      this.y = useWindowScroll().y.value
-    }
   },
   computed:{
 
+    useWinScroll(){
+      return useWindowScroll().y.value
+    }
   },
   watch:{
-    'y'(newValue){
-      if(newValue > 100){
-        document.querySelector('#appBar').classList.add("change-app-bar", "sticky")
-      }else{
-        document.querySelector('#appBar').classList.remove("change-app-bar", "sticky")
-      }
-    }
   }
 }
 </script>
 
 <style scoped>
-
+#background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
 .d-flex.justify-center {
   display: flex;
   justify-content: center;
@@ -90,7 +96,8 @@ export default {
 }
 .app-bar.change-app-bar{
   transition: all .5s ease;
-  background-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(169, 156, 156, 0.4) !important;
+  backdrop-filter: blur(3px) !important;
   border-radius: 0 0 10px 10px;
   height: 50px;
 }
@@ -114,6 +121,7 @@ export default {
   color: white;
   margin-right: 20px;
   background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
   vertical-align: center !important;
 }
 .welcome-text{
