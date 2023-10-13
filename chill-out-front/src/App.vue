@@ -1,13 +1,18 @@
 <template>
   <v-app>
-    <v-parallax :src="require('@/assets/back.png')" class="main" >
-      <v-app-bar app style="background: none;">
+    <v-parallax :src="require('@/assets/back.png')"  >
+      <v-app-bar
+          id="appBar"
+          app
+          style="background: none;"
+          class="app-bar notSticky"
+      >
         <div class="d-flex justify-center appbar">
-          <v-btn class="app-bar-buttons" height="60" >Главная</v-btn>
-          <v-btn class="app-bar-buttons" height="60" >О гильдии</v-btn>
-          <v-btn class="login app-bar-buttons" height="60" width="250" >Войти</v-btn>
-          <v-btn class="app-bar-buttons" height="60" >Лента активности</v-btn>
-          <v-btn class="app-bar-buttons" height="60" >Галерея</v-btn>
+          <v-btn class="app-bar-buttons" >Главная</v-btn>
+          <v-btn class="app-bar-buttons" >О гильдии</v-btn>
+          <v-btn class="login app-bar-buttons">Войти</v-btn>
+          <v-btn class="app-bar-buttons" >Лента активности</v-btn>
+          <v-btn class="app-bar-buttons" >Галерея</v-btn>
         </div>
       </v-app-bar>
       <div style="margin-top: 250px; padding-left: 200px;" class="welcome-text">
@@ -21,38 +26,95 @@
 <script>
 
 import Gallery from "@/components/Gallery";
+import { useWindowScroll } from "@vueuse/core"
+
 export default {
   name: 'App',
   components: {
     Gallery
+  },
+  data(){
+    return{
+      y: 0
+    }
+  },
+  mounted() {
+  document.addEventListener('scroll', this.useWinScroll)
+  },
+  methods:{
+    useWinScroll(){
+      this.y = useWindowScroll().y.value
+    }
+  },
+  computed:{
 
+  },
+  watch:{
+    'y'(newValue){
+      if(newValue > 100){
+        document.querySelector('#appBar').classList.add("change-app-bar", "sticky")
+      }else{
+        document.querySelector('#appBar').classList.remove("change-app-bar", "sticky")
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
+
 .d-flex.justify-center {
   display: flex;
   justify-content: center;
   width: 100%;
 }
-.appbar{
-  width: 1366px;
-  height: 60px;
-  flex-shrink: 0;
-  background: rgba(217, 217, 217, 0.20);
+.notSticky{
+
+  z-index: 1 !important;
+  position: fixed !important;
+  width: 100% !important;
+  justify-items: center !important;
+  transition: all .5s ease;
+  left: 0 !important;
+  top: 0 !important;
+}
+.notSticky.sticky{
+  width: 98% !important;
+  z-index: 6 !important;
+  left: 1% !important;
+}
+.app-bar{
+  transition: all .5s ease;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  height: 63px;
+}
+.app-bar.change-app-bar{
+  transition: all .5s ease;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0 0 10px 10px;
+  height: 50px;
+}
+.change-app-bar .app-bar-buttons{
+  transition: all .5s ease;
+  height: 52px !important;
+  margin-top: -20px;
+  margin-right: 10px;
 }
 .main{
-  /*background: url("assets/back.png");*/
+  background: url("assets/back.png");
 }
 .login{
+  width: 250px;
   background: rgba(217, 217, 217, 0.20);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
 }
 .app-bar-buttons{
+  height: 58px !important;
+  transition: all .5s ease;
   color: white;
   margin-right: 20px;
   background: rgba(255, 255, 255, 0.05);
+  vertical-align: center !important;
 }
 .welcome-text{
   white-space: pre-wrap;
