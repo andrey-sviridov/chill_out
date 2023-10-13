@@ -13,10 +13,10 @@
         class="app-bar notSticky"
         :class="[{'change-app-bar':  useWinScroll > 64}, {'sticky': useWinScroll > 64}]"
     >
-      <div class="d-flex justify-center appbar">
+      <div class="d-flex justify-center ">
         <v-btn class="app-bar-buttons" >Главная</v-btn>
         <v-btn class="app-bar-buttons" >О гильдии</v-btn>
-        <v-btn class="login app-bar-buttons">Войти</v-btn>
+        <v-btn class="login app-bar-buttons" @click="openLogin">Войти</v-btn>
         <v-btn class="app-bar-buttons" >Лента активности</v-btn>
         <v-btn class="app-bar-buttons" >Галерея</v-btn>
       </div>
@@ -25,9 +25,8 @@
       Добро пожаловать <br/> на страницу гильдии “Chill Out”!
     </div>
     <gallery class="pt-16"/>
-    <gallery class="pt-16"/>
-    <gallery class="pt-16"/>
   </v-app>
+  <login-dialog ref="loginDialog"/>
 </div>
 </template>
 
@@ -35,10 +34,12 @@
 
 import Gallery from "@/components/Gallery";
 import { useWindowScroll } from "@vueuse/core"
+import LoginDialog from "@/components/LoginDialog";
 
 export default {
   name: 'App',
   components: {
+    LoginDialog,
     Gallery
   },
   data(){
@@ -49,6 +50,9 @@ export default {
   mounted() {
   },
   methods:{
+    openLogin(){
+      this.$refs.loginDialog.showLoginDialog()
+    }
   },
   computed:{
 
@@ -73,9 +77,9 @@ export default {
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-left: 3%;
 }
 .notSticky{
-
   z-index: 1 !important;
   position: fixed !important;
   width: 100% !important;
@@ -87,7 +91,7 @@ export default {
 .notSticky.sticky{
   width: 98% !important;
   z-index: 6 !important;
-  left: 1% !important;
+  left: 1.05% !important;
 }
 .app-bar{
   transition: all .5s ease;
@@ -104,8 +108,7 @@ export default {
 .change-app-bar .app-bar-buttons{
   transition: all .5s ease;
   height: 52px !important;
-  margin-top: -20px;
-  margin-right: 10px;
+  margin: -20px 5px 0;
 }
 .main{
   background: url("assets/back.png");
@@ -119,7 +122,7 @@ export default {
   height: 58px !important;
   transition: all .5s ease;
   color: white;
-  margin-right: 20px;
+  margin: 10px;
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
   vertical-align: center !important;
@@ -136,5 +139,8 @@ export default {
 
 body {
   font-family: 'Neucha', cursive;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 </style>
