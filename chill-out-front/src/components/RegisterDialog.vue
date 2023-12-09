@@ -50,6 +50,7 @@
 <script>
 import {mdiPipeDisconnected} from '@mdi/js'
 import {required} from '@/services/require'
+
 export default {
   name: "register-dialog",
   data(){
