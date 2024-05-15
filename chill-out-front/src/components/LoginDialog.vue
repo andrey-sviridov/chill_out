@@ -63,13 +63,17 @@ import axios from "axios";
 export default {
   name: "login-dialog",
   components: {RegisterDialog},
-  mounted() {
-    if(new URL(location.href).searchParams.get('code') !== undefined){
+  created() {
+    if(new URL(location.href).searchParams.get('code') !== null && localStorage.getItem('chillout-discord-info') === null){
       let config = {
         headers: {'Authorization': 'Bearer CQKG9UGNWEScJHvyrxNV1HmLSa86Gr'}
       }
       axios.get('https://discord.com/api/users/@me', config).then(response=>{
         this.$store.commit('setUserData', response.data)
+        localStorage.setItem('chillout-discord-info', JSON.stringify(response.data))
+        let currentUrl = new URL(location.href);
+        currentUrl.searchParams.delete('code');
+
       })
     }
   },
@@ -98,8 +102,7 @@ export default {
       }
     },
     loginWithDiscord(){
-      //this.$router.go({ path: "https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify" })
-      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify'
+      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify';
     }
   }
 }

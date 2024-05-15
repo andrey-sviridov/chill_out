@@ -15,8 +15,8 @@
     >
       <div class="d-flex justify-center ">
         <v-btn class="app-bar-buttons" >Главная</v-btn>
-        <v-btn class="app-bar-buttons" >О гильдии</v-btn>
-        <v-btn class="login app-bar-buttons" @click="openLogin" v-if="userData.id === undefined">Войти</v-btn>
+        <v-btn class="app-bar-buttons" @click="test">О гильдии</v-btn>
+        <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData">Войти</v-btn>
         <div class="login app-bar-buttons text-center align-content-center" v-else>
           {{userData.global_name}}<br/>
           <v-btn
@@ -53,9 +53,7 @@ export default {
   data(){
     return{
       y: 0,
-      userData:{
-        id: ''
-      }
+      userData: null
     }
   },
   mounted() {
@@ -65,7 +63,12 @@ export default {
       this.$refs.loginDialog.showLoginDialog()
     },
     logout(){
-      this.$store.commit('clearUserData')
+      localStorage.removeItem('chillout-discord-info')
+      this.$store.commit('clearUserData');
+      location.reload();
+    },
+    test(){
+      this.userData = this.$store.getters.getUserData
     }
   },
   computed:{
@@ -73,15 +76,22 @@ export default {
     useWinScroll(){
       return useWindowScroll().y.value
     },
+    getLocalStorage(){
+      console.log('computedWorked')
+      console.log(localStorage.getItem('chillout-discord-info'))
+      return localStorage.getItem('chillout-discord-info')
+    }
   },
   watch: {
-    '$store.state.userData': {
-      handler(newValue) {
-        console.log(newValue);
-        this.userData = newValue;
+    'this.$store.getters.getUserData':{
+      handler(){
+        console.log('watch called');
+        this.userData = JSON.parse(this.getLocalStorage)
       },
-      immediate: true // Для того чтобы сработал обработчик при инициализации
+      immediate: true,
+      deep: true
     }
+
   }
 
 }

@@ -3,23 +3,23 @@ import { createStore } from 'vuex';
 // Определите состояние, мутации, действия и геттеры вашего хранилища Vuex
 const store = createStore({
     state: {
-        userData:{
-
-        }
+        userData: null
     },
     mutations: {
-        setUserData (state, data) {
-            state.userData = data
+        setUserData (data) {
+            this.state.userData = data
         },
-        clearUserData (state) {
-            state.userData = {}
+        clearUserData (store) {
+            store.userData = null
         }
     },
     actions: {
         // ваши действия
     },
     getters: {
-        // ваши геттеры
+        getUserData(state){
+            return state.userData
+        }
     }
 });
 
