@@ -34,7 +34,7 @@
           <v-divider length="150px"/>
         </v-row>
         <div>
-          <button>
+          <button @click="loginWithDiscord">
             <img src="../assets/discord.png"  alt="icon"/>
           </button>
         </div>
@@ -59,9 +59,20 @@
 import {mdiPipeDisconnected} from '@mdi/js'
 import {required} from '@/services/require'
 import RegisterDialog from "@/components/RegisterDialog";
+import axios from "axios";
 export default {
   name: "login-dialog",
   components: {RegisterDialog},
+  mounted() {
+    if(new URL(location.href).searchParams.get('code') !== undefined){
+      let config = {
+        headers: {'Authorization': 'Bearer CQKG9UGNWEScJHvyrxNV1HmLSa86Gr'}
+      }
+      axios.get('https://discord.com/api/users/@me', config).then(response=>{
+        this.$store.commit('setUserData', response.data)
+      })
+    }
+  },
   data(){
     return{
       icons: {
@@ -85,6 +96,10 @@ export default {
       if(!this.$refs.loginForm.validate()){
         alert('not validated')
       }
+    },
+    loginWithDiscord(){
+      //this.$router.go({ path: "https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify" })
+      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify'
     }
   }
 }

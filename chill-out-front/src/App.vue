@@ -16,7 +16,15 @@
       <div class="d-flex justify-center ">
         <v-btn class="app-bar-buttons" >Главная</v-btn>
         <v-btn class="app-bar-buttons" >О гильдии</v-btn>
-        <v-btn class="login app-bar-buttons" @click="openLogin">Войти</v-btn>
+        <v-btn class="login app-bar-buttons" @click="openLogin" v-if="userData.id === undefined">Войти</v-btn>
+        <div class="login app-bar-buttons text-center align-content-center" v-else>
+          {{userData.global_name}}<br/>
+          <v-btn
+              @click="logout"
+          >
+            Выйти
+          </v-btn>
+        </div>
         <v-btn class="app-bar-buttons" >Лента активности</v-btn>
         <v-btn class="app-bar-buttons" >Галерея</v-btn>
       </div>
@@ -44,7 +52,10 @@ export default {
   },
   data(){
     return{
-      y: 0
+      y: 0,
+      userData:{
+        id: ''
+      }
     }
   },
   mounted() {
@@ -52,16 +63,27 @@ export default {
   methods:{
     openLogin(){
       this.$refs.loginDialog.showLoginDialog()
+    },
+    logout(){
+      this.$store.commit('clearUserData')
     }
   },
   computed:{
 
     useWinScroll(){
       return useWindowScroll().y.value
-    }
+    },
   },
-  watch:{
+  watch: {
+    '$store.state.userData': {
+      handler(newValue) {
+        console.log(newValue);
+        this.userData = newValue;
+      },
+      immediate: true // Для того чтобы сработал обработчик при инициализации
+    }
   }
+
 }
 </script>
 
