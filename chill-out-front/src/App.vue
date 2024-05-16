@@ -1,4 +1,5 @@
 <template>
+  <login-dialog ref="loginDialog" @authorized="setAuthorizedInfo"/>
 <div>
   <video id="background-video" autoplay loop muted>
     <source :src="require('@/assets/video_animation.mp4')" type="video/mp4">
@@ -34,7 +35,6 @@
     </div>
     <gallery class="pt-16"/>
   </v-app>
-  <login-dialog ref="loginDialog"/>
 </div>
 </template>
 
@@ -56,9 +56,11 @@ export default {
       userData: null
     }
   },
-  mounted() {
-  },
   methods:{
+    setAuthorizedInfo(data){
+      localStorage.setItem('chillout-discord-info', JSON.stringify(data))
+      this.userData = data
+    },
     openLogin(){
       this.$refs.loginDialog.showLoginDialog()
     },
@@ -77,21 +79,25 @@ export default {
       return useWindowScroll().y.value
     },
     getLocalStorage(){
-      console.log('computedWorked')
-      console.log(localStorage.getItem('chillout-discord-info'))
-      return localStorage.getItem('chillout-discord-info')
+      let data = localStorage.getItem('chillout-discord-info');
+      if (data)
+        return JSON.parse(localStorage.getItem('chillout-discord-info'))
+      else
+          return null;
     }
+
   },
   watch: {
-    'this.$store.getters.getUserData':{
-      handler(){
-        console.log('watch called');
-        this.userData = JSON.parse(this.getLocalStorage)
+    getLocalStorage: {
+      handler(newValue) {
+        if(newValue)
+          this.userData = newValue;
+        else if(this.$store.getters.getUserData)
+          this.userData = this.$store.getters.getUserData
       },
       immediate: true,
       deep: true
     }
-
   }
 
 }

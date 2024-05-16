@@ -1,7 +1,7 @@
 import {createApp} from 'vue'
 import App from './App.vue'
 import "@mdi/font/css/materialdesignicons.css";
-import store from './services/store' // Импортируем хранилище Vuex
+import store from './services/store'
 
 
 import 'vuetify/styles'

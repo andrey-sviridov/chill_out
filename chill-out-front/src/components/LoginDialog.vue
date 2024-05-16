@@ -59,22 +59,12 @@
 import {mdiPipeDisconnected} from '@mdi/js'
 import {required} from '@/services/require'
 import RegisterDialog from "@/components/RegisterDialog";
-import axios from "axios";
 export default {
   name: "login-dialog",
   components: {RegisterDialog},
   created() {
-    if(new URL(location.href).searchParams.get('code') !== null && localStorage.getItem('chillout-discord-info') === null){
-      let config = {
-        headers: {'Authorization': 'Bearer CQKG9UGNWEScJHvyrxNV1HmLSa86Gr'}
-      }
-      axios.get('https://discord.com/api/users/@me', config).then(response=>{
-        this.$store.commit('setUserData', response.data)
-        localStorage.setItem('chillout-discord-info', JSON.stringify(response.data))
-        let currentUrl = new URL(location.href);
-        currentUrl.searchParams.delete('code');
-
-      })
+    if (!this.$store.state.userDataLoaded) {
+      this.checkAndFetchUserData();
     }
   },
   data(){
@@ -89,6 +79,38 @@ export default {
     }
   },
   methods:{
+    async checkAndFetchUserData() {
+      if (new URL(location.href).searchParams.get('code') !== null) {
+        try {
+          await this.$store.dispatch('fetchUserData').then(response =>{
+            this.$emit('authorized', response.data)
+            this.removeParam('code')
+          })
+        } catch (error) {
+          console.error('Ошибка при вызове fetchUserData:', error);
+        }
+      }
+    },
+    removeParam(parameter) {
+      console.log('removeParam is called')
+        let url=document.location.href;
+        let urlparts= url.split('?');
+
+        if (urlparts.length>=2)
+        {
+          let urlBase=urlparts.shift();
+          let queryString=urlparts.join("?");
+
+          let prefix = encodeURIComponent(parameter)+'=';
+          let pars = queryString.split(/[&;]/g);
+          for (let i= pars.length; i-->0;)
+            if (pars[i].lastIndexOf(prefix, 0)!==-1)
+              pars.splice(i, 1);
+          url = urlBase+'?'+pars.join('&');
+          window.history.pushState('',document.title,url); // added this line to push the new url directly to url bar .
+        }
+        return url;
+      },
     showLoginDialog(){
       this.isShow = true;
     },
@@ -102,9 +124,9 @@ export default {
       }
     },
     loginWithDiscord(){
-      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify';
+      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify+connections+guilds+gdm.join+guilds.join+guilds.members.read';
     }
-  }
+  },
 }
 </script>
 
