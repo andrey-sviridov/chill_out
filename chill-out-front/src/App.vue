@@ -19,7 +19,7 @@
         <v-btn class="app-bar-buttons" @click="test">О гильдии</v-btn>
         <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData">Войти</v-btn>
         <div class="login app-bar-buttons text-center align-content-center" v-else>
-          {{userData.global_name}}<br/>
+          {{userData.nick}}<br/>
           <v-btn
               @click="logout"
           >

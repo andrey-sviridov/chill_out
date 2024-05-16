@@ -39,16 +39,21 @@ const store = createStore({
                     }
                 };
 
+
                 const response = await axios.get('https://discord.com/api/users/@me', config);
-                const guildResponse = await axios.get(`https://discord.com/api/users/@me/guilds/${response.data.id}/member`)
+                const guildResponse = await axios.get(`https://discord.com/api/users/@me/guilds/466655473635164167/member`, config)
 
                 localStorage.setItem('chillout-discord-info', JSON.stringify(response.data))
                 commit('setUserData', response.data);
+                console.log('userData:')
+                console.log(response.data)
+                console.log('guildData:')
+                console.log(guildResponse.data)
                 commit('setGuildData', guildResponse.data);
                 commit('setUserDataLoaded', true);
                 commit('setGuildDataLoaded', true);
 
-                return response;
+                return guildResponse;
             } catch (error) {
                 throw new Error('Ошибка при получении данных пользователя: ' + error.message);
             }
