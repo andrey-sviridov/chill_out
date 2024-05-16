@@ -122,9 +122,9 @@ export default {
       if(!this.$refs.loginForm.validate()){
         alert('not validated')
       }
-    },
+    }, //http://localhost:8080/?code=NWib06Iaj41tnb5wooFUsdnR2Z6IRp&guild_id=466655473635164167&permissions=8
     loginWithDiscord(){
-      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify+connections+guilds+gdm.join+guilds.join+guilds.members.read';
+      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify+guilds+guilds.members.read';
     }
   },
 }

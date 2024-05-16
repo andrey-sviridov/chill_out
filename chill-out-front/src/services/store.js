@@ -6,7 +6,9 @@ import keys from "../../keys";
 const store = createStore({
     state: {
         userData: null,
-        userDataLoaded: false
+        guildData: null,
+        userDataLoaded: false,
+        guildDataLoaded: false
     },
     mutations: {
         setUserData(state, userData) {
@@ -17,23 +19,35 @@ const store = createStore({
         },
         clearData(state) {
             state.userData = null;
+        },
+        setGuildData(state, userData) {
+            state.guildData = userData;
+        },
+        setGuildDataLoaded(state, loaded) {
+            state.guildDataLoaded = loaded;
+        },
+        clearGuildData(state) {
+            state.guildData = null;
         }
     },
     actions: {
         async fetchUserData({ commit }) {
             try {
                 const config = {
-                    headers: {'Authorization': 'Bearer ' + keys.access_token}
+                    headers: {
+                        'Authorization': keys.access_token
+                    }
                 };
+
                 const response = await axios.get('https://discord.com/api/users/@me', config);
+                const guildResponse = await axios.get(`https://discord.com/api/users/@me/guilds/${response.data.id}/member`)
 
-                // Обновляем данные в хранилище Vuex
-                commit('setUserData', response.data);
-                // Сохраняем данные в localStorage
                 localStorage.setItem('chillout-discord-info', JSON.stringify(response.data))
-
-                // Устанавливаем флаг, что данные пользователя загружены
+                commit('setUserData', response.data);
+                commit('setGuildData', guildResponse.data);
                 commit('setUserDataLoaded', true);
+                commit('setGuildDataLoaded', true);
+
                 return response;
             } catch (error) {
                 throw new Error('Ошибка при получении данных пользователя: ' + error.message);
@@ -49,6 +63,9 @@ const store = createStore({
     getters: {
         getUserData(state){
             return state.userData
+        },
+        getGuildData(state){
+            return state.guildData
         }
     }
 });
