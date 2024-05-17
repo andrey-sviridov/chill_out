@@ -66,6 +66,9 @@ const store = createStore({
         }
     },
     getters: {
+        getIsLoadingGuild(state){
+            return state.guildDataLoaded
+        },
         getUserData(state){
             return state.userData
         },

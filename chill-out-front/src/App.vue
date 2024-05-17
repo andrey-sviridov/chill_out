@@ -2,7 +2,7 @@
   <login-dialog ref="loginDialog" @authorized="setAuthorizedInfo"/>
 <div>
   <video id="background-video" autoplay loop muted>
-    <source :src="require('@/assets/video_animation.mp4')" type="video/mp4">
+    <source :src="require('@/assets/dragonflight_animation.mp4')" type="video/mp4">
     Ваш браузер не поддерживает видео.
   </video>
 
@@ -16,10 +16,12 @@
     >
       <div class="d-flex justify-center ">
         <v-btn class="app-bar-buttons" >Главная</v-btn>
-        <v-btn class="app-bar-buttons" @click="test">О гильдии</v-btn>
+        <v-btn class="app-bar-buttons">О гильдии</v-btn>
         <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData">Войти</v-btn>
         <div class="logged app-bar-buttons text-center align-content-center" v-else>
-          <div class="container">
+
+          <v-progress-circular indeterminate :size="33" v-if="isloadedGuildInfo"/>
+          <div class="container" v-else>
             <v-avatar :image="getAvatar" size="50" class="avatar" />
 
             <div class="info">{{this.userData.user.global_name}} ({{userData.nick}})</div>
@@ -70,12 +72,12 @@ export default {
       localStorage.removeItem('chillout-discord-info')
       this.$store.commit('clearUserData');
       location.reload();
-    },
-    test(){
-      this.userData = this.$store.getters.getUserData
     }
   },
   computed:{
+    isloadedGuildInfo(){
+      return this.$store.state.getIsLoadingGuild
+    },
     getAvatar(){
       return `https://cdn.discordapp.com/avatars/${this.userData.user.id}/${this.userData.user.avatar}.png `
     },
