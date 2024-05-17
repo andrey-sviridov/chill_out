@@ -18,13 +18,14 @@
         <v-btn class="app-bar-buttons" >Главная</v-btn>
         <v-btn class="app-bar-buttons" @click="test">О гильдии</v-btn>
         <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData">Войти</v-btn>
-        <div class="login app-bar-buttons text-center align-content-center" v-else>
-          {{userData.nick}}<br/>
-          <v-btn
-              @click="logout"
-          >
-            Выйти
-          </v-btn>
+        <div class="logged app-bar-buttons text-center align-content-center" v-else>
+          <div class="container">
+            <v-avatar :image="getAvatar" size="50" class="avatar" />
+
+            <div class="info">{{this.userData.user.global_name}} ({{userData.nick}})</div>
+
+            <v-btn icon="mdi-logout" @click="logout" />
+          </div>
         </div>
         <v-btn class="app-bar-buttons" >Лента активности</v-btn>
         <v-btn class="app-bar-buttons" >Галерея</v-btn>
@@ -33,6 +34,7 @@
     <div style="margin-top: 250px; padding-left: 200px;" class="welcome-text">
       Добро пожаловать <br/> на страницу гильдии “Chill Out”!
     </div>
+    <gallery class="pt-16"/>
     <gallery class="pt-16"/>
   </v-app>
 </div>
@@ -74,7 +76,9 @@ export default {
     }
   },
   computed:{
-
+    getAvatar(){
+      return `https://cdn.discordapp.com/avatars/${this.userData.user.id}/${this.userData.user.avatar}.png `
+    },
     useWinScroll(){
       return useWindowScroll().y.value
     },
@@ -104,6 +108,21 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  display: flex; /* Включаем флексбокс */
+  align-items: center; /* Выравниваем элементы по вертикали по центру */
+  justify-content: space-between; /* Распределяем пространство между элементами равномерно */
+}
+
+.avatar {
+  margin-right: 10px; /* Добавляем отступ справа от аватара */
+  margin-left: 5px;
+}
+
+.info {
+  flex-grow: 1; /* Растягиваем блок с информацией, чтобы занимал всё доступное пространство */
+}
+
 #background-video {
   position: fixed;
   top: 0;
@@ -115,7 +134,6 @@ export default {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-left: 3%;
 }
 .notSticky{
   z-index: 1 !important;
@@ -153,6 +171,11 @@ export default {
 }
 .login{
   width: 250px;
+  background: rgba(217, 217, 217, 0.20);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
+}
+.logged{
+  width: 300px;
   background: rgba(217, 217, 217, 0.20);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
 }
