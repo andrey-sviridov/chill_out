@@ -33,8 +33,12 @@
         <v-btn class="app-bar-buttons" >Галерея</v-btn>
       </div>
     </v-app-bar>
-    <div style="margin-top: 250px; padding-left: 200px;" class="welcome-text">
-      Добро пожаловать <br/> на страницу гильдии “Chill Out”!
+    <div style="margin-top: 100px;" class="welcome-text">
+      Добро пожаловать на страницу гильдии “Chill Out”!
+    </div>
+    <!--  Заглушка для чего-нибудь (чтобы было расстояние между заголовком и контентом  -->
+    <div style="height: 250px">
+
     </div>
     <gallery class="pt-16"/>
     <gallery class="pt-16"/>
@@ -195,7 +199,7 @@ export default {
   color: #FFF;
   text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   font-size: 50px;
-  font-style: normal;
+  text-align: center;
 }
 </style>
 <style>
