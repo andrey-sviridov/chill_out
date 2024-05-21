@@ -14,15 +14,17 @@
         class="app-bar notSticky"
         :class="[{'change-app-bar':  useWinScroll > 64}, {'sticky': useWinScroll > 64}]"
     >
-      <div class="d-flex justify-center ">
+      <div class="d-flex justify-center">
         <v-btn class="app-bar-buttons" >Главная</v-btn>
         <v-btn class="app-bar-buttons">О гильдии</v-btn>
-        <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData">Войти</v-btn>
+        <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData && !getIsFetchingGuildDataInfo">Войти</v-btn>
         <div class="logged app-bar-buttons text-center align-content-center" v-else>
 
-          <v-progress-circular indeterminate :size="33" v-if="isloadedGuildInfo"/>
+          <div class="d-flex justify-center align-center" v-if="getIsFetchingGuildDataInfo">
+            <v-progress-circular indeterminate :size="35" />
+          </div>
           <div class="container" v-else>
-            <v-avatar :image="getAvatar" size="50" class="avatar" />
+            <v-avatar :image="getAvatar" :size="getAvatarSize" class="avatar" />
 
             <div class="info">{{this.userData.user.global_name}} ({{userData.nick}})</div>
 
@@ -61,6 +63,7 @@ export default {
   data(){
     return{
       y: 0,
+      avatarSize: 50,
       userData: null
     }
   },
@@ -79,6 +82,12 @@ export default {
     }
   },
   computed:{
+    getAvatarSize() {
+      return this.useWinScroll > 64 ? 40 : 50;
+    },
+    getIsFetchingGuildDataInfo(){
+      return this.$store.getters.getFetchingGuildData
+    },
     isloadedGuildInfo(){
       return this.$store.state.getIsLoadingGuild
     },
@@ -102,8 +111,6 @@ export default {
       handler(newValue) {
         if(newValue)
           this.userData = newValue;
-        else if(this.$store.getters.getUserData)
-          this.userData = this.$store.getters.getUserData
       },
       immediate: true,
       deep: true
@@ -121,8 +128,14 @@ export default {
 }
 
 .avatar {
-  margin-right: 10px; /* Добавляем отступ справа от аватара */
   margin-left: 5px;
+  transition: all .5s ease;
+
+}
+.avatar.avatar-changed{
+  margin-left: 5px;
+  height: 40px !important;
+  width: 40px !important;
 }
 
 .info {

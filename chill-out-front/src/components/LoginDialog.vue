@@ -85,6 +85,7 @@ export default {
           await this.$store.dispatch('fetchUserData').then(response =>{
             this.$emit('authorized', response.data)
             this.removeParam('code')
+            this.$store.commit('setFetchingGuildData', false)
           })
         } catch (error) {
           console.error('Ошибка при вызове fetchUserData:', error);

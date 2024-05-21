@@ -5,20 +5,13 @@ import keys from "../../keys";
 // Определите состояние, мутации, действия и геттеры вашего хранилища Vuex
 const store = createStore({
     state: {
-        userData: null,
         guildData: null,
-        userDataLoaded: false,
-        guildDataLoaded: false
+        guildDataLoaded: false,
+        isFetchingGuildData: false
     },
     mutations: {
-        setUserData(state, userData) {
-            state.userData = userData;
-        },
-        setUserDataLoaded(state, loaded) {
-            state.userDataLoaded = loaded;
-        },
-        clearData(state) {
-            state.userData = null;
+        setFetchingGuildData(state, loaded) {
+            state.isFetchingGuildData = loaded;
         },
         setGuildData(state, userData) {
             state.guildData = userData;
@@ -38,17 +31,10 @@ const store = createStore({
                         'Authorization': keys.access_token
                     }
                 };
-
-
-                const response = await axios.get('https://discord.com/api/users/@me', config);
+                //const response = await axios.get('https://discord.com/api/users/@me', config);
+                commit('setFetchingGuildData', true)
                 const guildResponse = await axios.get(`https://discord.com/api/users/@me/guilds/466655473635164167/member`, config)
-
-                localStorage.setItem('chillout-discord-info', JSON.stringify(response.data))
-                commit('setUserData', response.data);
-                console.log('userData:')
-                console.log(response.data)
-                console.log('guildData:')
-                console.log(guildResponse.data)
+                localStorage.setItem('chillout-discord-info', JSON.stringify(guildResponse.data.user))
                 commit('setGuildData', guildResponse.data);
                 commit('setUserDataLoaded', true);
                 commit('setGuildDataLoaded', true);
@@ -57,23 +43,17 @@ const store = createStore({
             } catch (error) {
                 throw new Error('Ошибка при получении данных пользователя: ' + error.message);
             }
-        },
-        initializeUserData({ commit }) {
-            const userData = JSON.parse(localStorage.getItem('chillout-discord-info'));
-            if (userData) {
-                commit('setUserData', userData);
-            }
         }
     },
     getters: {
         getIsLoadingGuild(state){
             return state.guildDataLoaded
         },
-        getUserData(state){
-            return state.userData
-        },
         getGuildData(state){
             return state.guildData
+        },
+        getFetchingGuildData(state){
+            return state.isFetchingGuildData
         }
     }
 });
