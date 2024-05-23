@@ -1,6 +1,10 @@
 <template>
 <div class="text-center">
-  <span style="margin-left: -60%">Галерея</span>
+  <span
+      style="margin-left: -60%; cursor: default"
+  >
+    Галерея
+  </span>
   <v-sheet
       class="mx-auto"
       elevation="3"
