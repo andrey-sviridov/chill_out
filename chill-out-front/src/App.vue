@@ -43,7 +43,9 @@
             </v-chip>
             </div>
 
-            <v-btn style="color: #940202" icon="mdi-logout" @click="logout" />
+            <v-btn style="color: #940202" icon="mdi-logout" class="btn-logout"
+                   :class="[{'btn-logout-changed':  useWinScroll > 64}]"
+                   @click="logout" />
           </div>
         </div>
         <v-btn class="app-bar-buttons" variant="plain">Лента активности</v-btn>
@@ -371,6 +373,7 @@ export default {
   align-items: center; /* центрирование по горизонтали */
   justify-content: center; /* центрирование по вертикали */
   padding: 0 20px 0 20px;
+  cursor: default;
 }
 
 .container {
@@ -463,6 +466,15 @@ export default {
   transition: max-height .3s ease-in-out, opacity .5s ease-in-out;
   opacity: 0;
   max-height: 0;
+}
+.btn-logout{
+  transition: all .3s ease-in-out;
+}
+.btn-logout-changed.btn-logout{
+  transition: all .3s ease-in-out;
+  padding-right: 10px;
+  --v-btn-size: 13px;
+
 }
 </style>
 <style>
