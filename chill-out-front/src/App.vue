@@ -19,7 +19,6 @@
         <v-btn class="app-bar-buttons" variant="plain">О гильдии</v-btn>
         <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData && !getIsFetchingGuildDataInfo">Войти</v-btn>
         <div class="app-bar-buttons text-center align-content-center"
-             :class="[{'change-app-bar':  useWinScroll > 64}]"
              v-else>
 
           <div class="d-flex justify-center align-center" v-if="getIsFetchingGuildDataInfo">
@@ -379,16 +378,20 @@ export default {
 }
 
 .container {
+  transition: all .5s ease-in-out;
   display: flex; /* Включаем флексбокс */
   justify-content: space-between; /* Распределяем пространство между элементами равномерно */
 }
+.container-changed.container{
+
+}
 
 .avatar {
-  margin-left: 5px;
-  transition: all .5s ease;
+  transition: all .5s ease-in-out;
 }
 .avatar-changed.avatar{
-  margin-top: 4px
+  margin-top: 4px;
+  margin-left: 10px;
 }
 
 .info {
@@ -471,8 +474,7 @@ export default {
 .btn-logout-changed.btn-logout{
   transition: all .3s ease-in-out;
   padding-right: 10px;
-  --v-btn-size: 13px;
-
+  --v-btn-size: 14px;
 }
 </style>
 <style>
