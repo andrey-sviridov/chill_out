@@ -419,7 +419,7 @@ export default {
 .notSticky.sticky{
   width: 98% !important;
   z-index: 6 !important;
-  left: 1.05% !important;
+  left: 0.8% !important;
 }
 .app-bar{
   transition: all .5s ease;
