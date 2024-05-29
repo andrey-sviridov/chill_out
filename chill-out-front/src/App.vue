@@ -419,7 +419,6 @@ export default {
 .notSticky.sticky{
   width: 98% !important;
   z-index: 6 !important;
-  left: 0.8% !important;
 }
 .app-bar{
   transition: all .5s ease;
@@ -432,10 +431,7 @@ export default {
   backdrop-filter: blur(3px) !important;
   border-radius: 0 0 10px 10px;
   height: 55px;
-}
-.change-app-bar {
-  transition: all .5s ease;
-  margin: -8px 5px 0;
+  margin: -8px 20px 0 20px;
 }
 .main{
   background: url("assets/back.png");
