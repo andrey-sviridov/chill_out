@@ -59,8 +59,8 @@
     <div style="height: 250px">
 
     </div>
-    <gallery class="pt-16"/>
-    <gallery class="pt-16"/>
+    <gallery class="pt-16" />
+    <gallery class="pt-16" />
   </v-app>
 </div>
 </template>
@@ -299,7 +299,7 @@ export default {
           },
           "flags": 0
         }
-      ]
+      ],
     }
   },
   methods:{
@@ -337,6 +337,7 @@ export default {
       return this.$store.state.getIsLoadingGuild
     },
     getAvatar(){
+      if(!this.userData) return ''
       return `https://cdn.discordapp.com/avatars/${this.userData.user.id}/${this.userData.user.avatar}.png `
     },
     useWinScroll(){
@@ -356,6 +357,7 @@ export default {
       handler(newValue) {
         if(newValue)
           this.userData = newValue;
+          this.$store.commit('setGuildData', newValue)
       },
       immediate: true,
       deep: true

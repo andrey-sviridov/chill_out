@@ -63,7 +63,7 @@ export default {
   name: "login-dialog",
   components: {RegisterDialog},
   created() {
-    if (!this.$store.state.userDataLoaded) {
+    if (!this.$store.state.guildDataLoaded) {
       this.checkAndFetchUserData();
     }
   },
@@ -80,10 +80,13 @@ export default {
   },
   methods:{
     async checkAndFetchUserData() {
-      if (new URL(location.href).searchParams.get('code') !== null) {
+      let code = new URL(location.href).searchParams.get('code');
+      if (code !== null) {
         try {
           await this.$store.dispatch('fetchUserData').then(response =>{
-            this.$emit('authorized', response.data)
+            console.log("123123213123")
+            console.log(response)
+            this.$emit('authorized', response)
             this.removeParam('code')
             this.$store.commit('setFetchingGuildData', false)
           })

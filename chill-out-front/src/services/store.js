@@ -1,6 +1,5 @@
 import { createStore } from 'vuex';
 import axios from "axios";
-import keys from "../../keys";
 
 // Определите состояние, мутации, действия и геттеры вашего хранилища Vuex
 const store = createStore({
@@ -25,25 +24,44 @@ const store = createStore({
     },
     actions: {
         async fetchUserData({ commit }) {
-            try {
-                const config = {
-                    headers: {
-                        'Authorization': keys.access_token
-                    }
-                };
-                //const response = await axios.get('https://discord.com/api/users/@me', config);
-                commit('setFetchingGuildData', true)
-                const guildResponse = await axios.get(`https://discord.com/api/users/@me/guilds/466655473635164167/member`, config)
-                localStorage.setItem('chillout-discord-info', JSON.stringify(guildResponse.data.user))
-                commit('setGuildData', guildResponse.data);
-                commit('setUserDataLoaded', true);
-                commit('setGuildDataLoaded', true);
+            let returnData = {}
+            commit('setFetchingGuildData', true)
 
-                return guildResponse;
-            } catch (error) {
-                throw new Error('Ошибка при получении данных пользователя: ' + error.message);
-            }
-        }
+                //Получение Bearer-токена
+                await axios.post('https://discord.com/api/oauth2/token',
+                    new URLSearchParams({
+                        'client_id': process.env.VUE_APP_CLIENT_ID,
+                        'client_secret': process.env.VUE_APP_CLIENT_SECRET,
+                        'grant_type': 'authorization_code',
+                        'redirect_uri': process.env.VUE_APP_REDIRECT_URI,
+                        'code': new URL(location.href).searchParams.get('code')
+                    }),
+                    {
+                        headers:
+                            {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            }
+                    }).then(async res =>{
+
+                    //Получение информации по пользователю
+                    await axios.get(`https://discord.com/api/users/@me/guilds/466655473635164167/member`, {
+                        headers: {
+                            'Authorization': `${res.data.token_type} ${res.data.access_token}`
+                        }
+                    }).then(async responseInfo => {
+                        localStorage.setItem('chillout-discord-info', JSON.stringify(responseInfo.data.user));
+                        commit('setGuildData', responseInfo.data);
+                        commit('setGuildDataLoaded', true);
+
+                        returnData = responseInfo.data;
+                    })
+
+                    commit('setFetchingGuildData', false)
+
+
+                })
+            return returnData
+        },
     },
     getters: {
         getIsLoadingGuild(state){
