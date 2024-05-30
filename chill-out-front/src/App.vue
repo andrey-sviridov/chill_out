@@ -8,19 +8,26 @@
 
   <v-app>
     <v-app-bar
-        id="appBar"
-        app
-        style="background: none;"
         class="app-bar notSticky"
         :class="[{'change-app-bar':  useWinScroll > 64}, {'sticky': useWinScroll > 64}]"
     >
-      <div class="d-flex justify-center">
+      <div class="d-flex justify-center" style="margin-left: 70px !important;">
         <v-btn class="app-bar-buttons" variant="plain">Главная</v-btn>
         <v-btn class="app-bar-buttons" variant="plain">О гильдии</v-btn>
-        <v-btn class="login app-bar-buttons" @click="openLogin" v-if="!userData && !getIsFetchingGuildDataInfo">Войти</v-btn>
-        <div class="app-bar-buttons text-center align-content-center"
-             v-else>
+        <v-btn @click="loginWithDiscord"
+               class="login app-bar-buttons"
+               :class="[{'login-changed':  useWinScroll > 64}]" variant="elevated" :ripple="false"  style="background: linear-gradient(150deg, #8697d3, #5e75c4);" v-if="!userData && !getIsFetchingGuildDataInfo">
+          <template v-slot:prepend>
+            <img src="@/assets/discord.png" />
+          </template>
+          <div style="font-size: 10px; font-weight: bold">
+            Войти через Discord
+          </div>
+        </v-btn>
 
+        <div class="align-content-center"
+             v-else
+        >
           <div class="d-flex justify-center align-center" v-if="getIsFetchingGuildDataInfo">
             <v-progress-circular indeterminate :size="35" />
           </div>
@@ -43,7 +50,7 @@
             </div>
 
             <v-btn style="color: #940202" icon="mdi-logout" class="btn-logout"
-                   :class="[{'btn-logout-changed':  useWinScroll > 64}]"
+                   :class="[{'btn-logout-changed':  useWinScroll > 64}]" variant="plain"
                    @click="logout" />
           </div>
         </div>
@@ -320,6 +327,9 @@ export default {
         hexValue = '0' + hexValue;
       }
       return '#' + hexValue;
+    },
+    loginWithDiscord(){
+      window.location.href = 'https://discord.com/oauth2/authorize?client_id=1162432797579952212&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2F&scope=identify+guilds+guilds.members.read';
     }
   },
   computed:{
@@ -349,7 +359,6 @@ export default {
       else
           return null;
     }
-
   },
   watch: {
     getLocalStorage: {
@@ -418,35 +427,40 @@ export default {
   transition: all .5s ease;
   left: 0 !important;
   top: 0 !important;
+  transform: translateX(0%) !important; /* Сдвиг на половину ширины для центрирования */
 }
 .notSticky.sticky{
   width: 98% !important;
   z-index: 6 !important;
 }
 .app-bar{
-  transition: all .5s ease;
+  transition: all .5s ease-in-out;
   background-color: rgba(255, 255, 255, 0.1) !important;
   height: 65px;
 }
 .change-app-bar.app-bar{
-  transition: all .5s ease;
+  transition: all .5s ease-in-out;
   background-color: rgba(169, 156, 156, 0.4) !important;
   backdrop-filter: blur(3px) !important;
   border-radius: 0 0 10px 10px;
   height: 55px;
-  margin: -8px 20px 0 20px;
+  margin: -10px 0 0 0;
+  transform: translateX(1%) !important; /* Сдвиг на половину ширины для центрирования */
 }
 .main{
   background: url("assets/back.png");
 }
 .login{
-  width: 250px;
   background: rgba(217, 217, 217, 0.20);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.38);
 }
+.login-changed.login{
+  height: 41px !important;
+  margin-top: 18px !important;
+}
 .app-bar-buttons{
   height: 58px !important;
-  transition: all .5s ease;
+  transition: all .5s ease-in-out;
   color: white;
   margin: 10px;
   vertical-align: center !important;

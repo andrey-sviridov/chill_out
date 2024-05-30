@@ -84,8 +84,6 @@ export default {
       if (code !== null) {
         try {
           await this.$store.dispatch('fetchUserData').then(response =>{
-            console.log("123123213123")
-            console.log(response)
             this.$emit('authorized', response)
             this.removeParam('code')
             this.$store.commit('setFetchingGuildData', false)
