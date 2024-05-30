@@ -14,13 +14,21 @@
       <div class="d-flex justify-center" style="margin-left: 70px !important;">
         <v-btn class="app-bar-buttons" variant="plain">Главная</v-btn>
         <v-btn class="app-bar-buttons" variant="plain">О гильдии</v-btn>
+
         <v-btn @click="loginWithDiscord"
                class="login app-bar-buttons"
-               :class="[{'login-changed':  useWinScroll > 64}]" variant="elevated" :ripple="false"  style="background: linear-gradient(150deg, #8697d3, #5e75c4);" v-if="!userData && !getIsFetchingGuildDataInfo">
+               :class="[{'login-changed':  useWinScroll > 64}]"
+               variant="elevated"
+               :ripple="false"
+               style="background: linear-gradient(150deg, #8697d3, #5e75c4);"
+               v-if="!userData && !getIsFetchingGuildDataInfo"
+        >
           <template v-slot:prepend>
             <img src="@/assets/discord.png" />
           </template>
-          <div style="font-size: 10px; font-weight: bold">
+          <div
+              style="font-size: 10px; font-weight: bold"
+          >
             Войти через Discord
           </div>
         </v-btn>
@@ -28,30 +36,47 @@
         <div class="align-content-center"
              v-else
         >
-          <div class="d-flex justify-center align-center" v-if="getIsFetchingGuildDataInfo">
-            <v-progress-circular indeterminate :size="35" />
+          <div
+              class="d-flex justify-center align-center"
+              v-if="getIsFetchingGuildDataInfo"
+          >
+            <v-progress-circular
+                indeterminate
+                :size="35"
+            />
           </div>
-          <div class="container"
-               :class="[{'container-changed':  useWinScroll > 64}]" v-else>
-            <v-avatar :image="getAvatar" :size="getAvatarSize" class="avatar"
-                      :class="[{'avatar-changed':  useWinScroll > 64}]" />
+          <div
+              class="container"
+              :class="[{'container-changed':  useWinScroll > 64}]"
+              v-else
+          >
+            <v-avatar
+                :image="getAvatar" :size="getAvatarSize" class="avatar"
+                :class="[{'avatar-changed':  useWinScroll > 64}]"
+            />
 
-            <div class="content-wrapper text-white">
+            <div
+                class="content-wrapper text-white"
+            >
               {{this.userData.user.global_name}} ({{userData.nick}}) <br/>
-            <v-chip v-for="role in filteredRoles"
-                    :key="role.id"
-                    :style="[{'background': getRoleColor(role.color)}]"
-                    variant="elevated" style="font-size: 13px; height: 25px; place-content: center"
-                    class="chip-role"
-                    :class="[{'chip-role-changed':  useWinScroll > 64}]"
+            <v-chip
+                v-for="role in filteredRoles"
+                :key="role.id"
+                variant="elevated"
+                style="font-size: 13px; height: 25px; place-content: center"
+                :style="[{'background': getRoleColor(role.color)}]"
+                class="chip-role"
+                :class="[{'chip-role-changed':  useWinScroll > 64}]"
             >
               {{ role.name }}
             </v-chip>
             </div>
 
-            <v-btn style="color: #940202" icon="mdi-logout" class="btn-logout"
-                   :class="[{'btn-logout-changed':  useWinScroll > 64}]" variant="plain"
-                   @click="logout" />
+            <v-btn
+                style="color: #940202" icon="mdi-logout" class="btn-logout"
+                :class="[{'btn-logout-changed':  useWinScroll > 64}]" variant="plain"
+                @click="logout"
+            />
           </div>
         </div>
         <v-btn class="app-bar-buttons" variant="plain">Лента активности</v-btn>
